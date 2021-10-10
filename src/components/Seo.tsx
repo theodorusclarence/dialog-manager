@@ -2,11 +2,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 const defaultMeta = {
-  title: 'Next.js + Tailwind CSS + TypeScript Starter',
-  site_name: 'Next.js + Tailwind CSS + TypeScript Starter',
+  title: 'Dialog Manager',
+  site_name: 'Dialog Manager',
   description:
-    ' A starter for Next.js, Tailwind CSS, and TypeScript with Absolute Import, Seo, Link component, pre-configured with Husky',
-  url: 'https://tsnext-tw.thcl.dev',
+    'A code example about Dialog Manager using TypeScript, Zustand with Immer, and Tailwind CSS',
+  url: 'https://dialog.thcl.dev',
   image: 'https://theodorusclarence.com/favicon/large-og.jpg',
   type: 'website',
   robots: 'follow, index',

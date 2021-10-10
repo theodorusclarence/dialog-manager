@@ -1,50 +1,101 @@
 import * as React from 'react';
 
-import ButtonLink from '@/components/links/ButtonLink';
+import useDialog from '@/hooks/useDialog';
+
+import Button from '@/components/buttons/Button';
+import Layout from '@/components/Layout';
 import CustomLink from '@/components/links/CustomLink';
-import UnstyledLink from '@/components/links/UnstyledLink';
 import Seo from '@/components/Seo';
 
 export default function HomePage() {
+  const dialog = useDialog();
+  const [status, setStatus] = React.useState<string>(
+    'Click one of the dialog!'
+  );
+
+  function openDanger() {
+    setStatus('Danger Dialog Opened');
+    dialog({
+      title: 'Danger!',
+      description: (
+        <>
+          This is a <strong className='text-red-600'>danger dialog</strong>.
+        </>
+      ),
+      catchOnCancel: true,
+      submitText: 'OH YES',
+      variant: 'danger',
+    })
+      .then(() => setStatus('Danger Dialog: Submitted'))
+      .catch(() => setStatus('Danger Dialog: Rejected'));
+  }
+
+  function openWarning() {
+    setStatus('Warning Dialog Opened');
+    dialog({
+      title: 'Warning!',
+      description: (
+        <>
+          This is a <strong className='text-yellow-600'>warning dialog</strong>.
+        </>
+      ),
+      catchOnCancel: true,
+      submitText: 'Okay',
+      variant: 'warning',
+    })
+      .then(() => setStatus('Warning Dialog: Submitted'))
+      .catch(() => setStatus('Warning Dialog: Rejected'));
+  }
+
+  function openSuccess() {
+    setStatus("Success Dialog Opened (this one don't catch reject)");
+    dialog({
+      title: 'Success!',
+      description: (
+        <>
+          This is a <strong className='text-green-600'>success dialog</strong>.
+        </>
+      ),
+      // Can be omitted
+      catchOnCancel: false,
+      submitText: 'Cool',
+      variant: 'success',
+    }).then(() => setStatus('Success Dialog: Submitted'));
+  }
+
   return (
-    <>
-      <Seo templateTitle='Home' />
+    // Check /components/Layout.tsx for DialogStore initialization.
+    // I usually put the Layout in _app.tsx
+    <Layout>
+      <Seo />
 
       <main>
-        <section className='bg-dark'>
-          <div className='flex flex-col items-center justify-center min-h-screen text-center text-white layout'>
-            <h1 className='text-2xl md:text-4xl'>
-              <CustomLink href='https://github.com/theodorusclarence/ts-nextjs-tailwind-starter'>
-                Next.js + Tailwind CSS + TypeScript Starter
-              </CustomLink>
-            </h1>
-            <p className='mt-2 text-sm text-gray-300'>
-              A starter for Next.js, Tailwind CSS, and TypeScript with Absolute
-              Import, Seo, Link component, pre-configured with Husky{' '}
+        <section className='bg-gray-50'>
+          <div className='flex flex-col items-center justify-center min-h-screen text-center layout'>
+            <h1 className='text-2xl md:text-4xl'>Dialog Manager</h1>
+            <p className='mt-2 text-sm text-gray-800'>
+              A code example about Dialog Manager using TypeScript, Zustand with
+              Immer, and Tailwind CSS
             </p>
-
-            <ButtonLink
-              className='mt-4'
-              href='/components'
-              variants='secondary'
+            <CustomLink
+              href='https://github.com/theodorusclarence/dialog-manager'
+              className='mt-2 text-sm font-medium text-gray-700'
             >
-              See all components
-            </ButtonLink>
+              Check the repository
+            </CustomLink>
 
-            <UnstyledLink
-              href='https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Ftheodorusclarence%2Fts-nextjs-tailwind-starter'
-              className='mt-4'
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                width='92'
-                height='32'
-                src='https://vercel.com/button'
-                alt='Deploy with Vercel'
-              />
-            </UnstyledLink>
+            <div className='flex flex-col gap-2 mt-6 md:flex-row'>
+              <Button onClick={openDanger}>Danger Dialog</Button>
+              <Button onClick={openWarning}>Warning Dialog</Button>
+              <Button onClick={openSuccess}>Success Dialog</Button>
+            </div>
 
-            <footer className='absolute text-gray-500 bottom-2'>
+            <div className='mt-8'>
+              <p className='font-semibold underline'>Status</p>
+              <p className='mt-2 text-sm text-gray-800'>{status}</p>
+            </div>
+
+            <footer className='absolute text-gray-700 bottom-2'>
               © {new Date().getFullYear()} By{' '}
               <CustomLink href='https://theodorusclarence.com?ref=tsnextstarter'>
                 Theodorus Clarence
@@ -53,6 +104,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-    </>
+    </Layout>
   );
 }
